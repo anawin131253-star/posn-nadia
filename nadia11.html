@@ -1,0 +1,2391 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>POSN PREPANNER V2</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+
+font-family:'Kanit',sans-serif;
+color:white;
+min-height:100vh;
+
+background:
+radial-gradient(circle at 10% 10%,rgba(59,130,246,.20),transparent 30%),
+radial-gradient(circle at 90% 10%,rgba(139,92,246,.18),transparent 30%),
+radial-gradient(circle at 50% 100%,rgba(6,182,212,.12),transparent 35%),
+#05070d;
+
+}
+
+body:before{
+
+content:"";
+position:fixed;
+inset:0;
+pointer-events:none;
+
+background-image:
+linear-gradient(rgba(255,255,255,.015) 1px,transparent 1px),
+linear-gradient(90deg,rgba(255,255,255,.015) 1px,transparent 1px);
+
+background-size:45px 45px;
+
+}
+
+.glass{
+
+background:rgba(15,20,32,.72);
+
+border:1px solid rgba(255,255,255,.08);
+
+box-shadow:
+0 25px 80px rgba(0,0,0,.35),
+inset 0 1px 0 rgba(255,255,255,.04);
+
+backdrop-filter:blur(20px);
+
+}
+
+.gradient{
+
+background:
+linear-gradient(
+90deg,
+#60a5fa,
+#8b5cf6,
+#22d3ee
+);
+
+-webkit-background-clip:text;
+background-clip:text;
+color:transparent;
+
+}
+
+.logo{
+
+width:55px;
+height:55px;
+
+border-radius:17px;
+
+background:
+linear-gradient(
+135deg,
+#2563eb,
+#7c3aed
+);
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+overflow:hidden;
+
+box-shadow:
+0 12px 40px rgba(37,99,235,.25);
+
+}
+
+.logo img{
+
+width:100%;
+height:100%;
+object-fit:contain;
+padding:5px;
+
+}
+
+.glass-light{
+
+background:rgba(255,255,255,.045);
+
+border:
+1px solid rgba(255,255,255,.07);
+
+}
+
+.card{
+
+transition:.25s;
+
+}
+
+.card:hover{
+
+transform:translateY(-3px);
+
+border-color:
+rgba(255,255,255,.15);
+
+}
+
+.progress{
+
+height:10px;
+
+background:
+rgba(255,255,255,.07);
+
+border-radius:100px;
+
+overflow:hidden;
+
+}
+
+.progress div{
+
+height:100%;
+
+border-radius:100px;
+
+background:
+linear-gradient(
+90deg,
+#3b82f6,
+#8b5cf6,
+#22d3ee
+);
+
+transition:
+width .5s ease;
+
+}
+
+.score{
+
+background:
+rgba(0,0,0,.25);
+
+border:
+1px solid rgba(255,255,255,.10);
+
+color:white;
+
+outline:none;
+
+}
+
+.score:focus{
+
+border-color:#60a5fa;
+
+box-shadow:
+0 0 0 3px
+rgba(96,165,250,.1);
+
+}
+
+.fade{
+
+animation:
+fade .45s ease;
+
+}
+
+@keyframes fade{
+
+from{
+
+opacity:0;
+transform:translateY(10px);
+
+}
+
+to{
+
+opacity:1;
+transform:translateY(0);
+
+}
+
+}
+
+.count{
+
+font-variant-numeric:
+tabular-nums;
+
+}
+
+.badge{
+
+font-size:11px;
+
+padding:
+5px 9px;
+
+border-radius:999px;
+
+}
+
+.red{
+
+background:
+rgba(239,68,68,.10);
+
+border:
+1px solid rgba(239,68,68,.20);
+
+color:#fca5a5;
+
+}
+
+.yellow{
+
+background:
+rgba(234,179,8,.10);
+
+border:
+1px solid rgba(234,179,8,.20);
+
+color:#fde68a;
+
+}
+
+.green{
+
+background:
+rgba(34,197,94,.10);
+
+border:
+1px solid rgba(34,197,94,.20);
+
+color:#86efac;
+
+}
+
+.blue{
+
+background:
+rgba(59,130,246,.10);
+
+border:
+1px solid rgba(59,130,246,.20);
+
+color:#93c5fd;
+
+}
+
+::-webkit-scrollbar{
+width:8px;
+}
+
+::-webkit-scrollbar-track{
+background:#05070d;
+}
+
+::-webkit-scrollbar-thumb{
+background:#273247;
+border-radius:99px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =====================================================
+LOGIN / SETUP
+===================================================== -->
+
+<section
+id="setupPage"
+class="min-h-screen flex items-center justify-center px-4 py-8">
+
+<div class="w-full max-w-2xl">
+
+
+<div class="text-center mb-7">
+
+<div
+class="logo mx-auto mb-5"
+style="width:78px;height:78px;border-radius:25px;">
+
+<img
+src="posn-logo.webp"
+alt="POSN"
+onerror="
+this.style.display='none';
+this.parentElement.innerHTML='สอวน.';
+">
+
+</div>
+
+<div class="text-blue-400 text-sm tracking-widest">
+
+POSN PREPANNER
+
+</div>
+
+<h1 class="text-4xl sm:text-5xl font-bold mt-2">
+
+เตรียมตัวให้พร้อม
+
+</h1>
+
+<p class="text-gray-500 mt-2">
+
+ระบบวางแผนและประเมินความพร้อมสอบ สอวน.
+
+</p>
+
+</div>
+
+
+<div class="glass rounded-[32px] p-6 sm:p-9">
+
+
+<div class="text-blue-400 text-sm">
+STEP 01
+</div>
+
+<h2 class="text-2xl font-bold mt-1 mb-6">
+
+👤 ข้อมูลผู้เข้าสอบ
+
+</h2>
+
+
+<label class="text-sm text-gray-400">
+
+ชื่อ
+
+</label>
+
+<input
+id="name"
+class="score w-full rounded-2xl px-4 py-3 mt-2 mb-5"
+placeholder="เช่น นาเดีย"
+>
+
+
+<label class="text-sm text-gray-400">
+
+📧 อีเมล
+
+</label>
+
+<input
+id="email"
+type="email"
+class="score w-full rounded-2xl px-4 py-3 mt-2 mb-5"
+placeholder="example@gmail.com"
+>
+
+
+<label class="text-sm text-gray-400">
+
+🔐 รหัสผ่าน
+
+</label>
+
+<input
+id="password"
+type="password"
+class="score w-full rounded-2xl px-4 py-3 mt-2"
+placeholder="อย่างน้อย 4 ตัวอักษร"
+>
+
+
+<div class="border-t border-white/5 my-8"></div>
+
+
+<div class="text-purple-400 text-sm">
+STEP 02
+</div>
+
+<h2 class="text-2xl font-bold mt-1 mb-6">
+
+🎯 เป้าหมายการสอบ
+
+</h2>
+
+
+<label class="text-sm text-gray-400">
+
+📅 วันสอบ
+
+</label>
+
+<input
+id="examDate"
+type="date"
+class="score w-full rounded-2xl px-4 py-3 mt-2 mb-5"
+>
+
+
+<label class="text-sm text-gray-400">
+
+🧪 วิชาที่สอบ
+
+</label>
+
+<div
+id="subjectSelect"
+class="grid grid-cols-2 sm:grid-cols-5 gap-2 mt-3 mb-6">
+
+</div>
+
+
+<label class="text-sm text-gray-400">
+
+🏆 คะแนนเป้าหมาย
+
+</label>
+
+<div class="relative mt-2 mb-7">
+
+<input
+id="target"
+type="number"
+min="1"
+max="100"
+class="score w-full rounded-2xl px-4 py-4 text-xl"
+placeholder="เช่น 80"
+>
+
+<span
+class="absolute right-5 top-1/2 -translate-y-1/2 text-gray-500">
+
+/ 100
+
+</span>
+
+</div>
+
+
+<button
+onclick="start()"
+class="
+w-full
+py-4
+rounded-2xl
+bg-gradient-to-r
+from-blue-600
+via-indigo-600
+to-purple-600
+font-bold
+text-lg
+hover:scale-[1.01]
+transition
+">
+
+🚀 เริ่มเตรียมตัว
+
+</button>
+
+
+<div
+id="error"
+class="hidden mt-4 p-4 rounded-2xl red">
+
+</div>
+
+
+</div>
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+MAIN
+===================================================== -->
+
+<section
+id="main"
+class="hidden">
+
+
+<!-- HEADER -->
+
+<header class="sticky top-0 z-50">
+
+<div class="glass rounded-b-3xl">
+
+<div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+
+<div class="flex justify-between items-center">
+
+
+<div class="flex items-center gap-3">
+
+<div class="logo">
+
+<img
+src="posn-logo.png"
+alt="POSN"
+onerror="
+this.style.display='none';
+this.parentElement.innerHTML='สอวน.';
+">
+
+</div>
+
+<div>
+
+<div class="font-bold text-xl">
+
+POSN
+<span class="gradient">
+PREPANNER
+</span>
+
+</div>
+
+<div
+id="welcome"
+class="text-xs text-gray-500">
+
+</div>
+
+</div>
+
+</div>
+
+
+<button
+onclick="logout()"
+class="
+px-4
+py-2
+rounded-xl
+bg-white/5
+hover:bg-white/10
+text-sm
+transition">
+
+ออกจากระบบ
+
+</button>
+
+
+</div>
+
+</div>
+
+</div>
+
+</header>
+
+
+
+<main
+class="max-w-7xl mx-auto px-4 sm:px-6 py-7 space-y-6">
+
+
+
+<!-- =====================================================
+PROFILE
+===================================================== -->
+
+<section
+class="glass rounded-[30px] p-6">
+
+<div
+class="grid
+grid-cols-2
+md:grid-cols-4
+gap-3">
+
+
+<div class="glass-light rounded-2xl p-4">
+
+<div class="text-xs text-gray-500">
+วิชา
+</div>
+
+<div
+id="subjectText"
+class="font-bold text-lg mt-1">
+-
+</div>
+
+</div>
+
+
+<div class="glass-light rounded-2xl p-4">
+
+<div class="text-xs text-gray-500">
+เป้าหมาย
+</div>
+
+<div
+id="targetText"
+class="font-bold text-lg mt-1">
+-
+</div>
+
+</div>
+
+
+<div class="glass-light rounded-2xl p-4">
+
+<div class="text-xs text-gray-500">
+สอบวันที่
+</div>
+
+<div
+id="dateText"
+class="font-bold text-sm mt-1">
+-
+</div>
+
+</div>
+
+
+<div class="glass-light rounded-2xl p-4">
+
+<div class="text-xs text-gray-500">
+เวลาเหลือ
+</div>
+
+<div
+id="daysSmall"
+class="font-bold text-lg mt-1">
+-
+</div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+COUNTDOWN
+===================================================== -->
+
+<section
+class="glass rounded-[32px] p-7 sm:p-10 text-center">
+
+<div class="text-blue-400 text-sm">
+COUNTDOWN
+</div>
+
+<h1 class="text-3xl sm:text-5xl font-bold mt-2">
+เหลือเวลาอีก
+</h1>
+
+
+<div
+class="grid grid-cols-4 max-w-3xl mx-auto gap-2 sm:gap-5 mt-8">
+
+
+<div class="glass-light rounded-2xl p-4">
+
+<div
+id="d"
+class="count text-3xl sm:text-5xl font-bold gradient">
+
+00
+
+</div>
+
+<div class="text-xs text-gray-500">
+วัน
+</div>
+
+</div>
+
+
+<div class="glass-light rounded-2xl p-4">
+
+<div
+id="h"
+class="count text-3xl sm:text-5xl font-bold gradient">
+
+00
+
+</div>
+
+<div class="text-xs text-gray-500">
+ชั่วโมง
+</div>
+
+</div>
+
+
+<div class="glass-light rounded-2xl p-4">
+
+<div
+id="m"
+class="count text-3xl sm:text-5xl font-bold gradient">
+
+00
+
+</div>
+
+<div class="text-xs text-gray-500">
+นาที
+</div>
+
+</div>
+
+
+<div class="glass-light rounded-2xl p-4">
+
+<div
+id="s"
+class="count text-3xl sm:text-5xl font-bold gradient">
+
+00
+
+</div>
+
+<div class="text-xs text-gray-500">
+วินาที
+</div>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+GOAL
+===================================================== -->
+
+<section
+class="grid md:grid-cols-3 gap-4">
+
+
+<div class="glass rounded-3xl p-6">
+
+<div class="text-3xl">
+🎯
+</div>
+
+<div class="text-gray-500 text-sm mt-3">
+คะแนนเป้าหมาย
+</div>
+
+<div
+id="goal"
+class="text-4xl font-bold gradient mt-1">
+0
+</div>
+
+</div>
+
+
+<div class="glass rounded-3xl p-6">
+
+<div class="text-3xl">
+📊
+</div>
+
+<div class="text-gray-500 text-sm mt-3">
+ความพร้อม
+</div>
+
+<div
+id="ready"
+class="text-4xl font-bold mt-1">
+0%
+</div>
+
+</div>
+
+
+<div class="glass rounded-3xl p-6">
+
+<div class="text-3xl">
+🔥
+</div>
+
+<div class="text-gray-500 text-sm mt-3">
+ต้องเพิ่มอีก
+</div>
+
+<div
+id="need"
+class="text-4xl font-bold mt-1">
+0
+</div>
+
+</div>
+
+
+</section>
+
+
+
+<!-- =====================================================
+STATUS
+===================================================== -->
+
+<section
+class="glass rounded-[30px] p-6">
+
+<div class="text-purple-400 text-sm">
+CURRENT STATUS
+</div>
+
+<h2 class="text-2xl font-bold mt-1">
+📊 สถานะการเตรียมตัว
+</h2>
+
+
+<div class="mt-6">
+
+<div class="flex justify-between text-sm mb-2">
+
+<span>
+ความพร้อม
+</span>
+
+<span
+id="readyLabel">
+0%
+</span>
+
+</div>
+
+
+<div class="progress">
+
+<div
+id="overallBar"
+style="width:0%">
+</div>
+
+</div>
+
+</div>
+
+
+<div
+id="statusBox"
+class="glass-light rounded-2xl p-5 mt-5">
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+CHAPTER
+===================================================== -->
+
+<section>
+
+<div class="mb-5">
+
+<div class="text-blue-400 text-sm">
+STEP 03
+</div>
+
+<h2 class="text-2xl sm:text-3xl font-bold">
+📚 ประเมินความพร้อมรายบท
+</h2>
+
+<p class="text-gray-500 text-sm mt-1">
+
+กรอกคะแนนความพร้อม 0–100 ของแต่ละบท
+
+</p>
+
+</div>
+
+
+<div
+id="chapters"
+class="grid md:grid-cols-2 gap-4">
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+WEAK
+===================================================== -->
+
+<section
+class="glass rounded-[30px] p-6">
+
+<div class="flex justify-between items-center">
+
+<div>
+
+<div class="text-red-400 text-sm">
+WEAK POINTS
+</div>
+
+<h2 class="text-2xl font-bold">
+🔴 บทที่ต้องเร่ง
+</h2>
+
+</div>
+
+<div
+id="weakNumber"
+class="badge red">
+
+0 บท
+
+</div>
+
+</div>
+
+
+<div
+id="weakList"
+class="grid md:grid-cols-2 gap-3 mt-5">
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+TODAY
+===================================================== -->
+
+<section
+class="glass rounded-[30px] p-6">
+
+<div>
+
+<div class="text-cyan-400 text-sm">
+TODAY'S PLAN
+</div>
+
+<h2 class="text-2xl sm:text-3xl font-bold mt-1">
+
+📅 วันนี้ต้องอ่านอะไร?
+
+</h2>
+
+<p
+id="todayDate"
+class="text-gray-500 text-sm mt-1">
+
+</p>
+
+</div>
+
+
+<div
+id="todayPlan"
+class="grid md:grid-cols-3 gap-4 mt-6">
+
+</div>
+
+</section>
+
+
+
+<!-- =====================================================
+FOCUS
+===================================================== -->
+
+<section
+class="glass rounded-[30px] p-6">
+
+<div class="text-purple-400 text-sm">
+FOCUS
+</div>
+
+<h2 class="text-2xl font-bold mt-1">
+🧠 วิธีอ่านวันนี้
+</h2>
+
+
+<div
+class="grid md:grid-cols-3 gap-4 mt-5">
+
+
+<div class="glass-light rounded-2xl p-5">
+
+<div class="text-3xl">
+1️⃣
+</div>
+
+<h3 class="font-bold mt-3">
+อ่านเนื้อหา
+</h3>
+
+<p class="text-sm text-gray-500 mt-2">
+อ่านเฉพาะหัวข้อที่ยังไม่แม่น
+และทำสรุปสั้น ๆ
+</p>
+
+</div>
+
+
+<div class="glass-light rounded-2xl p-5">
+
+<div class="text-3xl">
+2️⃣
+</div>
+
+<h3 class="font-bold mt-3">
+ทำโจทย์
+</h3>
+
+<p class="text-sm text-gray-500 mt-2">
+หลังอ่านให้ทำโจทย์ทันที
+เพื่อเช็กความเข้าใจ
+</p>
+
+</div>
+
+
+<div class="glass-light rounded-2xl p-5">
+
+<div class="text-3xl">
+3️⃣
+</div>
+
+<h3 class="font-bold mt-3">
+ประเมินใหม่
+</h3>
+
+<p class="text-sm text-gray-500 mt-2">
+กรอกคะแนนใหม่หลังฝึก
+เพื่อดูพัฒนาการ
+</p>
+
+</div>
+
+
+</div>
+
+</section>
+
+
+</main>
+
+
+
+<footer
+class="text-center py-10 text-xs text-gray-700">
+
+POSN PREPANNER
+•
+ระบบเตรียมสอบ สอวน.
+
+</footer>
+
+</section>
+
+
+
+<script>
+
+
+/* =====================================================
+SUBJECT DATA
+===================================================== */
+
+const subjects={
+
+physics:{
+name:"ฟิสิกส์",
+icon:"🧲",
+chapters:[
+
+["กลศาสตร์",
+"การเคลื่อนที่ แรง กฎของนิวตัน งาน พลังงาน โมเมนตัม"],
+
+["สมดุลกล",
+"สมดุลแรง สมดุลต่อการหมุน จุดศูนย์กลางมวล"],
+
+["การสั่นและคลื่น",
+"SHM คลื่น การแทรกสอด คลื่นนิ่ง"],
+
+["ของไหล",
+"ความดัน สมการความต่อเนื่อง สมการแบร์นูลลี"],
+
+["ความร้อน",
+"อุณหภูมิ ความร้อน กฎของแก๊ส"],
+
+["ไฟฟ้าสถิต",
+"ประจุ สนามไฟฟ้า ศักย์ ตัวเก็บประจุ"],
+
+["ไฟฟ้ากระแส",
+"กฎของโอห์ม วงจร กฎของเคอร์ชอฟฟ์"],
+
+["แม่เหล็ก",
+"สนามแม่เหล็ก แรงแม่เหล็ก การเหนี่ยวนำ"],
+
+["ฟิสิกส์ยุคใหม่",
+"โฟตอน อะตอม นิวเคลียร์ สัมพัทธภาพ"]
+
+]},
+
+chemistry:{
+name:"เคมี",
+icon:"🧪",
+chapters:[
+
+["โครงสร้างอะตอม",
+"อนุภาค ออร์บิทัล การจัดเรียงอิเล็กตรอน"],
+
+["ตารางธาตุ",
+"แนวโน้มสมบัติของธาตุและตารางธาตุ"],
+
+["พันธะเคมี",
+"ไอออนิก โคเวเลนต์ โลหะ รูปร่างโมเลกุล"],
+
+["ปริมาณสาร",
+"โมล มวล สมการเคมี สารละลาย"],
+
+["แก๊ส",
+"กฎแก๊ส สมการแก๊สอุดมคติ"],
+
+["อัตราการเกิดปฏิกิริยา",
+"อัตรา ปัจจัย และพลังงานก่อกัมมันต์"],
+
+["สมดุลเคมี",
+"ค่าคงที่สมดุล หลักเลอชาเตอลิเยร์"],
+
+["กรด-เบส",
+"pH Ka Kb บัฟเฟอร์"],
+
+["ไฟฟ้าเคมี",
+"เซลล์ไฟฟ้า อิเล็กโทรลิซิส"],
+
+["เคมีอินทรีย์",
+"หมู่ฟังก์ชันและปฏิกิริยาอินทรีย์"]
+
+]},
+
+biology:{
+name:"ชีววิทยา",
+icon:"🧬",
+chapters:[
+
+["เคมีของสิ่งมีชีวิต",
+"น้ำ คาร์โบไฮเดรต ไขมัน โปรตีน"],
+
+["เซลล์",
+"โครงสร้างเซลล์ ออร์แกเนลล์ การลำเลียง"],
+
+["เอนไซม์และเมแทบอลิซึม",
+"เอนไซม์ การหายใจ การสังเคราะห์ด้วยแสง"],
+
+["พันธุศาสตร์",
+"เมนเดล DNA RNA โครโมโซม"],
+
+["วิวัฒนาการ",
+"การคัดเลือกโดยธรรมชาติและหลักฐาน"],
+
+["พืช",
+"โครงสร้าง การลำเลียง ฮอร์โมน"],
+
+["สัตว์",
+"เนื้อเยื่อและระบบต่าง ๆ"],
+
+["ร่างกายมนุษย์",
+"ย่อยอาหาร หายใจ เลือด ขับถ่าย"],
+
+["นิเวศวิทยา",
+"ประชากร ชุมชน ห่วงโซ่อาหาร"]
+
+]},
+
+math:{
+name:"คณิตศาสตร์",
+icon:"📐",
+chapters:[
+
+["จำนวนและพีชคณิต",
+"จำนวนจริง สมการ อสมการ พหุนาม"],
+
+["ทฤษฎีจำนวน",
+"จำนวนเฉพาะ การหารลงตัว ห.ร.ม."],
+
+["ฟังก์ชัน",
+"ฟังก์ชัน สมการ ลำดับ อนุกรม"],
+
+["เรขาคณิต",
+"สามเหลี่ยม วงกลม เรขาคณิตวิเคราะห์"],
+
+["ตรีโกณมิติ",
+"ฟังก์ชันตรีโกณมิติและเอกลักษณ์"],
+
+["การนับ",
+"หลักการบวก หลักการคูณ การเรียงสับเปลี่ยน"],
+
+["ความน่าจะเป็น",
+"เหตุการณ์และความน่าจะเป็น"],
+
+["คอมบินาทอริก",
+"การนับขั้นสูงและกราฟ"],
+
+["โจทย์แข่งขัน",
+"โจทย์ประยุกต์และโจทย์แข่งขัน"]
+
+]},
+
+astronomy:{
+name:"ดาราศาสตร์",
+icon:"🌌",
+chapters:[
+
+["ทรงกลมท้องฟ้า",
+"พิกัดท้องฟ้าและการเคลื่อนที่ปรากฏ"],
+
+["ระบบสุริยะ",
+"ดวงอาทิตย์ ดาวเคราะห์ ดาวหาง"],
+
+["โลกและดวงจันทร์",
+"ฤดูกาล ข้างขึ้นข้างแรม สุริยุปราคา"],
+
+["ดาวฤกษ์",
+"กำเนิดดาว วิวัฒนาการดาว สีและอุณหภูมิ"],
+
+["กาแล็กซี",
+"ทางช้างเผือกและประเภทกาแล็กซี"],
+
+["จักรวาล",
+"บิกแบงและการขยายตัวของเอกภพ"],
+
+["ฟิสิกส์ดาราศาสตร์",
+"สเปกตรัม ความส่องสว่าง กฎของเคปเลอร์"],
+
+["การสังเกตการณ์",
+"กล้องโทรทรรศน์และการวิเคราะห์ข้อมูล"],
+
+["โจทย์ดาราศาสตร์",
+"โจทย์คำนวณและโจทย์ประยุกต์"]
+
+]}
+
+};
+
+
+
+/* =====================================================
+STATE
+===================================================== */
+
+let selected="";
+
+let scores=
+JSON.parse(
+localStorage.getItem("posn_scores")||"{}"
+);
+
+
+
+/* =====================================================
+SUBJECT SETUP
+===================================================== */
+
+Object.entries(subjects).forEach(
+([key,value])=>{
+
+const box=
+document.createElement("button");
+
+box.className=
+"glass-light rounded-2xl p-3 text-center hover:bg-white/10 transition";
+
+box.innerHTML=`
+
+<div class="text-2xl">
+${value.icon}
+</div>
+
+<div class="text-sm mt-1">
+${value.name}
+</div>
+
+`;
+
+box.onclick=()=>{
+
+document.querySelectorAll("#subjectSelect button")
+.forEach(x=>x.classList.remove(
+"ring-2",
+"ring-blue-400"
+));
+
+box.classList.add(
+"ring-2",
+"ring-blue-400"
+);
+
+selected=key;
+
+};
+
+document
+.getElementById("subjectSelect")
+.appendChild(box);
+
+});
+
+
+
+/* =====================================================
+START
+===================================================== */
+
+function start(){
+
+const name=
+document.getElementById("name").value.trim();
+
+const email=
+document.getElementById("email").value.trim();
+
+const password=
+document.getElementById("password").value;
+
+const examDate=
+document.getElementById("examDate").value;
+
+const target=
+Number(
+document.getElementById("target").value
+);
+
+
+if(!name){
+
+showError("กรุณากรอกชื่อ");
+
+return;
+}
+
+
+if(!email.includes("@")){
+
+showError("กรุณากรอกอีเมลให้ถูกต้อง");
+
+return;
+}
+
+
+if(password.length<4){
+
+showError(
+"รหัสผ่านต้องมีอย่างน้อย 4 ตัวอักษร"
+);
+
+return;
+}
+
+
+if(!examDate){
+
+showError("กรุณาเลือกวันสอบ");
+
+return;
+}
+
+
+if(!selected){
+
+showError("กรุณาเลือกวิชา");
+
+return;
+}
+
+
+if(target<1||target>100){
+
+showError(
+"คะแนนเป้าหมายต้องอยู่ระหว่าง 1-100"
+);
+
+return;
+}
+
+
+const profile={
+
+name,
+email,
+password,
+examDate,
+subject:selected,
+target
+
+};
+
+
+localStorage.setItem(
+"posn_profile",
+JSON.stringify(profile)
+);
+
+
+showMain();
+
+}
+
+
+
+function showError(text){
+
+const el=
+document.getElementById("error");
+
+el.textContent=
+"⚠️ "+text;
+
+el.classList.remove("hidden");
+
+}
+
+
+
+/* =====================================================
+SHOW MAIN
+===================================================== */
+
+function showMain(){
+
+document
+.getElementById("setupPage")
+.classList.add("hidden");
+
+document
+.getElementById("main")
+.classList.remove("hidden");
+
+load();
+
+}
+
+
+
+/* =====================================================
+LOAD
+===================================================== */
+
+function load(){
+
+const profile=
+JSON.parse(
+localStorage.getItem("posn_profile")
+);
+
+if(!profile) return;
+
+
+selected=
+profile.subject;
+
+
+document.getElementById(
+"welcome"
+).textContent=
+"สวัสดี "+profile.name+" 👋";
+
+
+document.getElementById(
+"subjectText"
+).textContent=
+subjects[profile.subject].icon+
+" "+
+subjects[profile.subject].name;
+
+
+document.getElementById(
+"targetText"
+).textContent=
+profile.target+" คะแนน";
+
+
+document.getElementById(
+"goal"
+).textContent=
+profile.target;
+
+
+const date=
+new Date(profile.examDate+"T00:00:00");
+
+
+document.getElementById(
+"dateText"
+).textContent=
+date.toLocaleDateString(
+"th-TH",
+{
+day:"numeric",
+month:"long",
+year:"numeric"
+}
+);
+
+
+document.getElementById(
+"todayDate"
+).textContent=
+new Date().toLocaleDateString(
+"th-TH",
+{
+weekday:"long",
+day:"numeric",
+month:"long",
+year:"numeric"
+}
+);
+
+
+renderChapters();
+
+update();
+
+}
+
+
+
+/* =====================================================
+SCORE
+===================================================== */
+
+function scoreOf(index){
+
+return scores[
+`${selected}_${index}`
+] ?? "";
+
+}
+
+
+function saveScore(index,value){
+
+if(value===""){
+
+delete scores[
+`${selected}_${index}`
+];
+
+}else{
+
+let n=
+Number(value);
+
+if(n<0)n=0;
+if(n>100)n=100;
+
+scores[
+`${selected}_${index}`
+]=n;
+
+}
+
+localStorage.setItem(
+"posn_scores",
+JSON.stringify(scores)
+);
+
+
+renderChapters();
+update();
+
+}
+
+
+
+/* =====================================================
+STATUS
+===================================================== */
+
+function status(score){
+
+if(score===""){
+
+return {
+icon:"⚪",
+text:"ยังไม่ได้ประเมิน",
+class:"badge blue"
+};
+
+}
+
+score=Number(score);
+
+
+if(score<40){
+
+return {
+icon:"🔴",
+text:"อ่อนมาก",
+class:"badge red"
+};
+
+}
+
+
+if(score<60){
+
+return {
+icon:"🔴",
+text:"ต้องเร่ง",
+class:"badge red"
+};
+
+}
+
+
+if(score<75){
+
+return {
+icon:"🟡",
+text:"ควรทบทวน",
+class:"badge yellow"
+};
+
+}
+
+
+return {
+icon:"🟢",
+text:"พร้อม",
+class:"badge green"
+};
+
+}
+
+
+
+/* =====================================================
+CHAPTER RENDER
+===================================================== */
+
+function renderChapters(){
+
+const container=
+document.getElementById("chapters");
+
+container.innerHTML="";
+
+
+subjects[selected].chapters
+.forEach((chapter,index)=>{
+
+const score=
+scoreOf(index);
+
+const st=
+status(score);
+
+
+const card=
+document.createElement("div");
+
+card.className=
+"glass card rounded-3xl p-5 fade";
+
+
+card.innerHTML=`
+
+<div class="flex justify-between">
+
+<div>
+
+<div class="text-xs text-gray-600">
+บทที่ ${index+1}
+</div>
+
+<h3 class="font-bold text-lg">
+${chapter[0]}
+</h3>
+
+</div>
+
+<div>
+${st.icon}
+</div>
+
+</div>
+
+
+<p class="text-xs text-gray-500 mt-3 leading-5">
+${chapter[1]}
+</p>
+
+
+<div class="flex gap-3 items-center mt-5">
+
+<input
+
+type="number"
+
+min="0"
+
+max="100"
+
+value="${score}"
+
+placeholder="0-100"
+
+class="score rounded-xl px-4 py-3 w-28"
+
+onchange="
+saveScore(${index},this.value)
+"
+
+>
+
+<span class="text-xs text-gray-500">
+คะแนนความพร้อม
+</span>
+
+</div>
+
+
+<div class="mt-4 progress">
+
+<div
+style="width:${score===""?0:score}%">
+</div>
+
+</div>
+
+
+<div class="flex justify-between items-center mt-3">
+
+<span class="${st.class}">
+${st.icon} ${st.text}
+</span>
+
+<span class="text-xs text-gray-600">
+
+${score===""?"—":score+"%"}
+
+</span>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+
+
+/* =====================================================
+UPDATE DASHBOARD
+===================================================== */
+
+function update(){
+
+const profile=
+JSON.parse(
+localStorage.getItem("posn_profile")
+);
+
+
+const chapters=
+subjects[selected].chapters;
+
+
+const values=[];
+
+
+chapters.forEach((_,i)=>{
+
+const s=scoreOf(i);
+
+if(s!==""){
+values.push(Number(s));
+}
+
+});
+
+
+const readiness=
+values.length
+?
+Math.round(
+values.reduce(
+(a,b)=>a+b,0
+)/values.length
+)
+:0;
+
+
+const target=
+Number(profile.target);
+
+
+const gap=
+Math.max(
+0,
+target-readiness
+);
+
+
+document.getElementById(
+"ready"
+).textContent=
+readiness+"%";
+
+
+document.getElementById(
+"readyLabel"
+).textContent=
+readiness+"%";
+
+
+document.getElementById(
+"overallBar"
+).style.width=
+readiness+"%";
+
+
+document.getElementById(
+"need"
+).textContent=
+gap+" คะแนน";
+
+
+/* STATUS */
+
+let statusMessage;
+
+
+if(!values.length){
+
+statusMessage=
+"📝 ยังไม่มีคะแนน — เริ่มกรอกคะแนนรายบทเพื่อให้ระบบวิเคราะห์";
+
+}else if(readiness<40){
+
+statusMessage=
+"🔴 ต้องเร่งเตรียมตัว — เริ่มจากบทที่คะแนนต่ำที่สุด";
+
+}else if(readiness<60){
+
+statusMessage=
+"🟠 มีหลายบทที่ยังไม่แข็งแรง — ควรเน้นพื้นฐานและทำโจทย์";
+
+}else if(readiness<75){
+
+statusMessage=
+"🟡 กำลังไปได้ดี — เพิ่มการทำโจทย์และทบทวนบทที่ต่ำกว่า 75%";
+
+}else if(readiness<target){
+
+statusMessage=
+"🔵 ใกล้เป้าหมายแล้ว — เหลืออีก "+gap+" คะแนน";
+
+}else{
+
+statusMessage=
+"🟢 ถึงหรือเกินคะแนนเป้าหมายแล้ว — รักษาระดับและเน้นโจทย์แข่งขัน";
+
+}
+
+
+document.getElementById(
+"statusBox"
+).textContent=
+statusMessage;
+
+
+renderWeak();
+
+renderToday();
+
+}
+
+
+
+/* =====================================================
+WEAK
+===================================================== */
+
+function renderWeak(){
+
+const list=[];
+
+
+subjects[selected].chapters
+.forEach((chapter,index)=>{
+
+const score=
+scoreOf(index);
+
+
+if(score!=="" &&
+Number(score)<75){
+
+list.push({
+
+name:chapter[0],
+score:Number(score),
+index:index
+
+});
+
+}
+
+});
+
+
+list.sort(
+(a,b)=>a.score-b.score
+);
+
+
+document.getElementById(
+"weakNumber"
+).textContent=
+list.length+" บท";
+
+
+const container=
+document.getElementById("weakList");
+
+container.innerHTML="";
+
+
+if(!list.length){
+
+container.innerHTML=`
+
+<div class="glass-light rounded-2xl p-6 text-center md:col-span-2">
+
+<div class="text-4xl">
+🎉
+</div>
+
+<div class="font-bold mt-3">
+ยังไม่มีบทที่ต่ำกว่า 75%
+</div>
+
+<div class="text-xs text-gray-500 mt-1">
+กรอกคะแนนเพื่อให้ระบบวิเคราะห์
+</div>
+
+</div>
+
+`;
+
+return;
+
+}
+
+
+list.slice(0,6)
+.forEach((item,i)=>{
+
+const div=
+document.createElement("div");
+
+div.className=
+"glass-light rounded-2xl p-4";
+
+
+div.innerHTML=`
+
+<div class="flex justify-between">
+
+<div>
+
+<div class="text-xs text-gray-600">
+อันดับ ${i+1}
+</div>
+
+<div class="font-bold">
+🔴 ${item.name}
+</div>
+
+</div>
+
+<div class="text-red-300 font-bold">
+${item.score}%
+</div>
+
+</div>
+
+
+<div class="progress mt-3">
+
+<div style="width:${item.score}%">
+</div>
+
+</div>
+
+
+<div class="text-xs text-gray-500 mt-3">
+
+แนะนำ:
+${
+item.score<40
+?
+"อ่านพื้นฐานใหม่ + ทำโจทย์ง่าย"
+:
+item.score<60
+?
+"ทบทวนเนื้อหา + ทำโจทย์"
+:
+"ทบทวนจุดที่ผิด + ทำโจทย์แข่งขัน"
+}
+
+</div>
+
+`;
+
+container.appendChild(div);
+
+});
+
+}
+
+
+
+/* =====================================================
+TODAY PLAN
+===================================================== */
+
+function renderToday(){
+
+const chapters=
+subjects[selected].chapters;
+
+
+const list=[];
+
+
+chapters.forEach((chapter,index)=>{
+
+const score=
+scoreOf(index);
+
+
+list.push({
+
+name:chapter[0],
+
+detail:chapter[1],
+
+score:
+score===""?0:Number(score),
+
+index:index
+
+});
+
+});
+
+
+list.sort(
+(a,b)=>a.score-b.score
+);
+
+
+const selectedList=
+list.slice(0,3);
+
+
+const container=
+document.getElementById(
+"todayPlan"
+);
+
+container.innerHTML="";
+
+
+selectedList.forEach(
+(item,index)=>{
+
+
+let time;
+let action;
+let icon;
+
+
+if(item.score<40){
+
+time=75;
+action=
+"อ่านพื้นฐานใหม่ + ทำโจทย์ 10 ข้อ";
+icon="🔴";
+
+}else if(item.score<60){
+
+time=60;
+action=
+"ทบทวนเนื้อหา + ทำโจทย์ 15 ข้อ";
+icon="🟠";
+
+}else if(item.score<75){
+
+time=45;
+action=
+"ทบทวนจุดที่ผิด + ทำโจทย์";
+icon="🟡";
+
+}else{
+
+time=30;
+action=
+"ทำโจทย์แข่งขัน + สรุปสูตร";
+icon="🟢";
+
+}
+
+
+const card=
+document.createElement("div");
+
+card.className=
+"glass-light rounded-3xl p-5 fade";
+
+
+card.innerHTML=`
+
+<div class="flex justify-between">
+
+<div>
+
+<div class="text-xs text-gray-600">
+ภารกิจ ${index+1}
+</div>
+
+<h3 class="font-bold text-lg mt-1">
+${icon} ${item.name}
+</h3>
+
+</div>
+
+<div class="text-sm text-blue-300">
+${time} นาที
+</div>
+
+</div>
+
+
+<div class="mt-5 p-4 rounded-2xl bg-white/[.025]">
+
+<div class="text-xs text-gray-500">
+สิ่งที่ควรทำ
+</div>
+
+<div class="text-sm mt-1">
+${action}
+</div>
+
+</div>
+
+
+<div class="mt-4">
+
+<div class="flex justify-between text-xs mb-2">
+
+<span class="text-gray-500">
+คะแนนปัจจุบัน
+</span>
+
+<span>
+${item.score}%
+</span>
+
+</div>
+
+<div class="progress">
+
+<div
+style="width:${item.score}%">
+</div>
+
+</div>
+
+</div>
+
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+
+
+/* =====================================================
+COUNTDOWN
+===================================================== */
+
+function countdown(){
+
+const profile=
+JSON.parse(
+localStorage.getItem("posn_profile")
+);
+
+if(!profile)return;
+
+
+const exam=
+new Date(
+profile.examDate+"T23:59:59"
+);
+
+const now=
+new Date();
+
+
+let diff=
+exam-now;
+
+
+if(diff<0)
+diff=0;
+
+
+const days=
+Math.floor(
+diff/(1000*60*60*24)
+);
+
+
+const hours=
+Math.floor(
+diff/(1000*60*60)%24
+);
+
+
+const minutes=
+Math.floor(
+diff/(1000*60)%60
+);
+
+
+const seconds=
+Math.floor(
+diff/1000%60
+);
+
+
+document.getElementById("d")
+.textContent=
+String(days).padStart(2,"0");
+
+
+document.getElementById("h")
+.textContent=
+String(hours).padStart(2,"0");
+
+
+document.getElementById("m")
+.textContent=
+String(minutes).padStart(2,"0");
+
+
+document.getElementById("s")
+.textContent=
+String(seconds).padStart(2,"0");
+
+
+document.getElementById(
+"daysSmall"
+).textContent=
+days+" วัน";
+
+}
+
+
+setInterval(
+countdown,
+1000
+);
+
+
+
+/* =====================================================
+LOGOUT
+===================================================== */
+
+function logout(){
+
+if(
+confirm(
+"ต้องการออกจากระบบหรือไม่?"
+)
+){
+
+localStorage.removeItem(
+"posn_profile"
+);
+
+location.reload();
+
+}
+
+}
+
+
+
+/* =====================================================
+AUTO LOGIN
+===================================================== */
+
+window.addEventListener(
+"DOMContentLoaded",
+()=>{
+
+const profile=
+localStorage.getItem(
+"posn_profile"
+);
+
+
+if(profile){
+
+showMain();
+
+}
+
+}
+);
+
+
+</script>
+
+</body>
+</html>
